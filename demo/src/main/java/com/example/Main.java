@@ -31,56 +31,41 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        Document doc = Jsoup.connect(URL).get();
+        Document doc = Jsoup.connect(URL).get(); //grabs the html file ig from the url
 
-        Elements allfullreviews = doc.getElementsByClass("w_DHV_ pv3 mv0");
-        //Elements reviews = doc.getElementsByClass("tl-m mb3 db-m");
-;
-        //System.out.println(doc);
-        // System.out.println("Outer HTML: " + link.outerHtml());
-        // System.out.println("Inner HTML: " + link.html());
+        Elements allfullreviews = doc.getElementsByClass("w_DHV_ pv3 mv0"); //grabbing all reviews which includes all the info about the stars, name, and other stuff
 
-       // System.out.println(fullreviews);
+        Review[] reviews = new Review[allfullreviews.size()]; //creating a list of reviews to store the reviews fromt he site
 
-        // Object[] idk = allfullreviews.toArray();
+        for (int i =0; i < allfullreviews.size(); i++){ //itterating through all the reviews
 
-        // Element[] fullreviews = new Element[idk.length];
-        Review[] reviews = new Review[allfullreviews.size()];
-
-        for (int i =0; i < allfullreviews.size(); i++){
-
-            //System.out.println(idk[i]);
             // System.out.println(allfullreviews.get(i).getElementsByClass("tl-m mb3 db-m").first());
             // System.out.println(allfullreviews.get(i).getElementsByClass("f6 gray pr2 mb2").first());
 
-            reviews[i] = new Review(Cleaner.cleanReview(allfullreviews.get(i).getElementsByClass("tl-m mb3 db-m").first().toString())
+            reviews[i] = new Review(Cleaner.cleanReview(allfullreviews.get(i).getElementsByClass("tl-m mb3 db-m").first().toString()) //cleans the html stuff and creates a new review object
                                     , Cleaner.cleanName(allfullreviews.get(i).getElementsByClass("f6 gray pr2 mb2").first().toString()));
 
             System.out.println(reviews[i].name);
 
-
-
             //System.out.println("NEXT ###########################################################################################################");
         }
-
-        //System.out.println(allfullreviews.get(0).getElementsByClass("tl-m mb3 db-m").first());
     }
 }
 
 class Cleaner{
     static String cleanReview(String review){
-        review = review.substring(35,review.length()-7);
-        review = review.replaceAll("[-+.^:,]","");
+        review = review.substring(35,review.length()-7); //just gets rid  of the beginnnign html/xml stuff
+        review = review.replaceAll("[-+.^:,]",""); //removing all puntuations to make compartison easy
         return review;
     }
-    static String cleanName(String name){
+    static String cleanName(String name){ //same as above
         name = name.substring(31,name.length()-7);
         name = name.replaceAll("[-+.^:,]","");
         return name;
     }
 }
 
-class Review{
+class Review{ //self explanatory
     public String name;
     public String review;
     public boolean isGoodMatch = false;
@@ -89,4 +74,8 @@ class Review{
         this.name = name;
         this.review = review;
     }
+}
+
+class Tester{
+    //WRITE the word detector here plz and return a T/F thx
 }
