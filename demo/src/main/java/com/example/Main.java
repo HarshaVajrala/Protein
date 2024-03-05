@@ -54,8 +54,6 @@ public class Main {
             System.out.println(newURL);
 
             Document doc = Jsoup.connect(newURL)
-            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36")
-            .referrer("http://www.google.com")
             .get(); //grabs the html file ig from the url
 
             Elements allfullreviews = doc.getElementsByClass("w_DHV_ pv3 mv0"); //grabbing all reviews which includes all the info about the stars, name, and other stuff
@@ -82,7 +80,7 @@ public class Main {
             
         }
 
-        reviews.add(new Review("There are so many different trail mix is out there. But this great value trail mix has all the best things. It has proteins it has calcium it has all the nutrients in different minerals that your body is going to need in one pack. And it also has all the great savings that youreThere are so many different trail mixes out there. But this great value trail mix has all the best things. It has proteins it has calcium it has all the nutrients in different minerals that your body is going to need in one pack. And it also has all the great savings that your pocket is going to need and love","joe"));
+        reviews.add(new Review(Cleaner.cleanReview("There are so many different trail mix is out there. But this great value trail mix has all the best things. It has proteins it has calcium it has all the nutrients in different minerals that your body is going to need in one pack. And it also has all the great savings that youreThere are so many different trail mixes out there. But this great value trail mix has all the best things. It has proteins it has calcium it has all the nutrients in different minerals that your body is going to need in one pack. And it also has all the great savings that your pocket is going to need and love"),"joe"));
 
         String[] targetNames = Comparator.testRevs(reviews);
         System.out.println("Potential targets :)");
@@ -100,7 +98,7 @@ class Cleaner{
     static String cleanReview(String review){
         review = review.substring(35,review.length()-7); //just gets rid  of the beginnnign html/xml stuff
         review = review.replaceAll("[-+.^:,]",""); //removing all puntuations to make compartison easy
-        return review;
+        return review.toLowerCase();
     }
     static String cleanName(String name){ //same as above
         name = name.substring(31,name.length()-7);
@@ -112,7 +110,7 @@ class Cleaner{
 class Comparator{
 
     static String[] testRevs(ArrayList<Review> reviews){
-        File file = new File("C:\\Users\\meow1\\OneDrive\\Desktop\\hell\\sell\\demo\\src\\main\\java\\com\\example\\keywords.txt");
+        File file = new File("demo\\src\\main\\java\\com\\example\\keywords.txt");
         Scanner sc;
         String[] words;
 
@@ -128,7 +126,7 @@ class Comparator{
     
                 for (String rw : rwords){
                     for (String w: words){
-                        System.out.println(rw);
+                        //System.out.println(rw);
                         if (w.equals(rw)){
                             if (!names.contains(r.name)){
                                 names.add(r.name);
