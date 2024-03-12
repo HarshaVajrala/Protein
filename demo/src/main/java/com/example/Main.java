@@ -16,10 +16,13 @@ import org.jsoup.select.Elements;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.random.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+
 
 
 public class Main {
@@ -104,35 +107,36 @@ public class Main {
         .header("Connection", "keep-alive")
         .get();
 
-        System.out.println(startdoc);
+        //System.out.println(startdoc);
 
-        Elements relatedProducts = startdoc.getElementsByClass("flex flex-column items-center pa1 pr2 pb2 pr4");
+        Elements relatedProducts = startdoc.getElementsByAttribute("data-item-id");
 
         
         System.out.println(relatedProducts.size());
-        System.out.println(relatedProducts.first().attr("data-id"));
+        System.out.println(relatedProducts.first().attr("data-item-id"));
 
         for (int i = 0; i < relatedProducts.size(); i++){
-            //allProducts.add(new Product(Integer.valueOf(relatedProducts.get(i).attr("data-id"))));
+            //allProducts.add(new Product(Integer.valueOf(relatedProducts.get(i).attr("data-item-id"))));
         }
 
         // <div role="group" data-item-id="189071348" class="sans-serif mid-gray relative flex flex-column w-100 h-100 hide-child-opacity" 
-        //Product mounttrail =  new Product(35192854);
-        //allProducts.add(mounttrail);
+        Product mounttrail =  new Product(35192854);
+        allProducts.add(mounttrail);
 
-        ArrayList<String> targetNames = new ArrayList<String>();
+        ArrayList<Review> targetNames = new ArrayList<Review>();
 
         for(Product p : allProducts){
-            for(String s: Comparator.testRevs(p.reviews)){
-                targetNames.add(s);
+            for(Review r: Comparator.testRevs(p.reviews)){
+                targetNames.add(r);
             }
         }
 
         System.out.println("Potential targets :)");
         FileWriter myWriter = new FileWriter("demo\\src\\main\\java\\com\\example\\targetmarket.txt");
 
-        for(String i : targetNames){
-            System.out.println(i);
+        for(Review i : targetNames){
+            System.out.print(i.name);
+            System.out.println(" <----- " + i.getHighestCat());
             myWriter.write(i + "\n");
 
         }
@@ -161,38 +165,80 @@ class Cleaner{
 
 class Comparator{
 
-    static String[] testRevs(ArrayList<Review> reviews){
-        File file = new File("demo\\src\\main\\java\\com\\example\\keywords.txt");
+    static ArrayList<ArrayList<String>> records = new ArrayList<>();
+
+    static ArrayList<Review> testRevs(ArrayList<Review> reviews){
+        File file = new File("demo\\src\\main\\java\\com\\example\\keywords.csv");
         Scanner sc;
         String[] words;
 
-        ArrayList<String> names = new ArrayList<String>();
+
+
+        try{
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNextLine()) {
+                records.add(getRecordFromLine(scanner.nextLine()));
+            }
+        } catch(Exception e){
+            System.out.println("keywords file not found!");
+        }
+
+        System.out.println(records.get(0).get(0));
+
+        /*
+         * private List<String> getRecordFromLine(String line) {
+                List<String> values = new ArrayList<String>();
+                try (Scanner rowScanner = new Scanner(line)) {
+                    rowScanner.useDelimiter(COMMA_DELIMITER);
+                    while (rowScanner.hasNext()) {
+                        values.add(rowScanner.next());
+                    }
+                }
+                return values;
+            }
+         */
+
+        ArrayList<Review> names = new ArrayList<Review>();
         try{
             sc = new Scanner(file);
             String line = sc.nextLine();
 
             words = line.split(",");
+                
 
             for (Review r: reviews){
                 String[] rwords = r.review.split(" ");
+                names.add(r);
     
                 for (String rw : rwords){
-                    for (String w: words){
+                    for (ArrayList<String> l: records){
                         //System.out.println(rw);
-                        if (w.equals(rw)){
-                            if (!names.contains(r.name)){
-                                names.add(r.name);
-                            }
-                            break;
+                        //System.out.println(l.get(0));
+                        if (l.get(0).equals(rw)){
+                            r.healtyRating += Integer.parseInt(l.get(2));
+                            r.hikingRating += Integer.parseInt(l.get(1));
+                            r.protienRating += Integer.parseInt(l.get(3));
                         }
                     }
                 }
+                System.out.println(r.getHighestCat());
             }
         } catch(Exception e){
             System.out.println(e);
         }
 
-        return Arrays.copyOf(names.toArray(), names.toArray().length, String[].class);
+        return names;
+    }
+
+    static private ArrayList<String> getRecordFromLine(String line) {
+        ArrayList<String> values = new ArrayList<String>();
+        try (Scanner rowScanner = new Scanner(line)) {
+            rowScanner.useDelimiter(",");
+            while (rowScanner.hasNext()) {
+                values.add(rowScanner.next());
+            }
+        }
+        return values;
     }
 
 }
@@ -202,14 +248,29 @@ class Review{ //self explanatory
     public String review;
     public boolean isGoodMatch = false;
 
+    public int healtyRating = 0;
+    public int hikingRating = 0;
+    public int protienRating = 0;
+
     public Review(String review, String name){
         this.name = name;
         this.review = review;
+    }
+
+    public String getHighestCat(){
+        if(healtyRating > hikingRating &&  healtyRating > protienRating){
+            return "healty";
+        } else if(hikingRating > healtyRating &&  hikingRating > protienRating){
+            return "hiking";
+        } else{
+            return "protien";
+        }
     }
 }
 
 class Product{
 
+    Random rand = new Random();
     public int id;
 
     ArrayList<Review> reviews = new ArrayList<Review>(); //creating a list of reviews to store the reviews fromt he site
@@ -255,7 +316,7 @@ class Product{
             }
 
             try{
-            Thread.sleep(2000);
+            Thread.sleep(2000 + rand.nextInt());
             } catch(Exception e){
                 
             }
