@@ -1,6 +1,7 @@
 package com.example;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.text.html.HTMLEditorKit.Parser;
@@ -133,13 +134,15 @@ public class Main {
 
         System.out.println("Potential targets :)");
         FileWriter myWriter = new FileWriter("demo\\src\\main\\java\\com\\example\\targetmarket.txt");
+        PrintWriter printWriter = new PrintWriter(myWriter);
 
         for(Review i : targetNames){
             System.out.print(i.name);
             System.out.println(" <----- " + i.getHighestCat());
-            myWriter.write(i + "\n");
-
+            printWriter.println(i.name + "," + i.review + "," + i.healtyRating + "," + i.hikingRating + "," + i.protienRating + "," + i.getHighestCat());
         }
+
+        printWriter.close();
 
 
         
