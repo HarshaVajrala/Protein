@@ -117,7 +117,7 @@ public class Main {
         System.out.println(relatedProducts.first().attr("data-item-id"));
 
         for (int i = 0; i < relatedProducts.size(); i++){
-            //allProducts.add(new Product(Integer.valueOf(relatedProducts.get(i).attr("data-item-id"))));
+            allProducts.add(new Product(Integer.valueOf(relatedProducts.get(i).attr("data-item-id"))));
         }
 
         // <div role="group" data-item-id="189071348" class="sans-serif mid-gray relative flex flex-column w-100 h-100 hide-child-opacity" 
@@ -175,6 +175,7 @@ class Comparator{
         Scanner sc;
         String[] words;
 
+        System.out.println("Rating reviews: ...");
 
 
         try{
@@ -224,7 +225,7 @@ class Comparator{
                         }
                     }
                 }
-                System.out.println(r.getHighestCat());
+                //System.out.println(r.getHighestCat());
             }
         } catch(Exception e){
             System.out.println(e);
@@ -286,7 +287,7 @@ class Product{
         
         String newURL;
 
-        for (int x = 1; x <= 1; x++){
+        for (int x = 1; x <= 5; x++){
 
             newURL = URL + id + addon + Integer.toString(x);
         
@@ -295,7 +296,7 @@ class Product{
             }
 
             //newURL = urls[x-1];
-            System.out.println(newURL);
+            System.out.println("Scraping: " + newURL);
 
             try{
                 
@@ -319,9 +320,9 @@ class Product{
             }
 
             try{
-            Thread.sleep(2000 + rand.nextInt());
+            Thread.sleep(5000);
             } catch(Exception e){
-                
+                System.out.println(e);
             }
         }
     }
@@ -329,6 +330,7 @@ class Product{
     public void addReviewsFromPage(Document doc){
 
         Elements allfullreviews = doc.getElementsByClass("w_DHV_ pv3 mv0"); //grabbing all reviews which includes all the info about the stars, name, and other stuff
+        System.out.println("Getting reviews: ...");
 
         for (int i =0; i < allfullreviews.size(); i++){ //itterating through all the reviews
             try{
