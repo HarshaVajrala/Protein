@@ -45,11 +45,11 @@ public class Main {
 
     // }
 
-    //private static final String URL = "https://www.walmart.com/reviews/product/35192854";
-    private static final String URL = "https://www.walmart.com/ip/Great-Value-Mountain-Trail-Mix-26-oz/39205511?athbdg=L1200&from=/search";
+    //private static final String URL = "https://www.walmart.com/reviews/product/285037596";
+    private static final String URL = "https://www.walmart.com/ip/Premier-Protein-Shake-Chocolate-30g-Protein-11-fl-oz-12-Ct/285037596";
 
     
-    private static String[] urls = {"https://www.walmart.com/reviews/product/35192854","https://www.walmart.com/reviews/product/35192854?page=2","https://www.walmart.com/reviews/product/35192854?page=3","https://www.walmart.com/reviews/product/35192854?page=4"};
+    private static String[] urls = {"https://www.walmart.com/reviews/product/285037596","https://www.walmart.com/reviews/product/285037596?page=2","https://www.walmart.com/reviews/product/285037596?page=3","https://www.walmart.com/reviews/product/285037596?page=4"};
     public static void main(String[] args) throws IOException {
 
         // ArrayList<Review> reviews = new ArrayList<Review>(); //creating a list of reviews to store the reviews fromt he site
@@ -98,7 +98,7 @@ public class Main {
 
         ArrayList<Product> allProducts = new ArrayList<Product>();
 
-        String startingProduct = "https://www.walmart.com/ip/Great-Value-Mountain-Trail-Mix-26-oz/39205511?athbdg=L1200&from=/search";
+        String startingProduct = "https://www.walmart.com/ip/Premier-Protein-Shake-Chocolate-30g-Protein-11-fl-oz-12-Ct/285037596";
 
         Document startdoc = Jsoup.connect(startingProduct)
         .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36")
@@ -279,7 +279,7 @@ class Product{
 
     ArrayList<Review> reviews = new ArrayList<Review>(); //creating a list of reviews to store the reviews fromt he site
     
-    String URL = "https://www.walmart.com/reviews/product/";
+    String URL = "hhttps://www.walmart.com/reviews/product/285037596";
     String addon = "?page=";
 
 
